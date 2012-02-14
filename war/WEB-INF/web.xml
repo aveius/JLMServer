@@ -5,12 +5,12 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet>
-		<servlet-name>JLM_GAE</servlet-name>
-		<servlet-class>jlm.gae.JLM_GAEServlet</servlet-class>
+		<servlet-name>JLMServer</servlet-name>
+		<servlet-class>jlm.gae.JLMServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>JLM_GAE</servlet-name>
-		<url-pattern>/jlm_gae</url-pattern>
+		<servlet-name>JLMServer</servlet-name>
+		<url-pattern>/jlmserver</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
