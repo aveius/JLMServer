@@ -19,9 +19,15 @@
         <p>There are not yet exercises done...</p>
         <%
     } else {
+        String s;
         for (Entity exercise : exercises) {
+            s = "failed";
+            if((Boolean)exercise.getProperty("success")){
+                s = "solved";
+            }
         %>
-    <p><b><%= exercise.getProperty("username") %></b> worked.</p>
+    <p><b><%= exercise.getProperty("username") %></b> <%= s %> <em><%= exercise.getProperty("exoname")%></em>
+        in <u><%= exercise.getProperty("exolang")%></u>.</p>
 <%
         }
     }
