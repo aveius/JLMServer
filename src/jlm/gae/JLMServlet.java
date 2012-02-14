@@ -10,11 +10,6 @@ public class JLMServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(JLMServlet.class.getName());
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world!");
-	}
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
