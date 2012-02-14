@@ -6,9 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
-public class JLMServlet extends HttpServlet {
+public class StudentServlet extends HttpServlet {
 
-    private static final Logger log = Logger.getLogger(JLMServlet.class.getName());
+    private static final Logger log = Logger.getLogger(StudentServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
