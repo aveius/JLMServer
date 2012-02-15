@@ -11,16 +11,20 @@ public class Exercise extends GAEObject {
 	private String userName;
 	private String exoName;
 	private String exoLang;
+	private String courseName;
 	private int passedTests;
 	private int totalTests;
 	private Date date;
 
 	public Exercise(String userName, String exoName, String exoLang,
-			int passedTests, int totalTests) {
+			String courseName, int passedTests, int totalTests) {
 		super(KIND);
+		createKey(exoName);
+
 		this.userName = userName;
 		this.exoName = exoName;
 		this.exoLang = exoLang;
+		this.courseName = courseName;
 		this.passedTests = passedTests;
 		this.totalTests = totalTests;
 		date = new Date();
@@ -32,23 +36,25 @@ public class Exercise extends GAEObject {
 		userName = (String) e.getProperty("username");
 		exoName = (String) e.getProperty("exoname");
 		exoLang = (String) e.getProperty("exolang");
+		courseName = (String) e.getProperty("coursename");
 		passedTests = (Integer) e.getProperty("passedtests");
 		totalTests = (Integer) e.getProperty("totaltests");
 		date = (Date) e.getProperty("date");
 	}
 
 	public void save() {
-		Entity exercise = new Entity(KIND, key);
-		exercise.setProperty("username", userName);
-		exercise.setProperty("exoname", exoName);
-		exercise.setProperty("exolang", exoLang);
-		exercise.setProperty("passedtests", passedTests);
-		exercise.setProperty("totaltests", totalTests);
-		exercise.setProperty("date", date);
+		Entity en = new Entity(KIND, key);
+		en.setProperty("username", userName);
+		en.setProperty("exoname", exoName);
+		en.setProperty("exolang", exoLang);
+		en.setProperty("coursename", courseName);
+		en.setProperty("passedtests", passedTests);
+		en.setProperty("totaltests", totalTests);
+		en.setProperty("date", date);
 
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		datastore.put(exercise);
+		datastore.put(en);
 	}
 
 	public String getUserName() {
@@ -73,6 +79,14 @@ public class Exercise extends GAEObject {
 
 	public void setExoLang(String exoLang) {
 		this.exoLang = exoLang;
+	}
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 
 	public int getPassedTests() {
