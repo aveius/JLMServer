@@ -22,7 +22,7 @@
         String s;
         for (Entity exercise : exercises) {
             s = "failed";
-            if((Boolean)exercise.getProperty("success")){
+            if(exercise.getProperty("passedtests") == exercise.getProperty("totaltests")){
                 s = "solved";
             }
         %>

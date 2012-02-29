@@ -13,6 +13,7 @@ import com.google.appengine.api.datastore.Query;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 
 import jlm.gae.models.Course;
@@ -29,7 +30,11 @@ public class TeacherServlet extends HttpServlet {
 			String course = req.getParameter("course");
 
 			Course co = new Course(course);
-			co.save();
+			boolean b = co.save();
+
+			PrintStream ps = new PrintStream(resp.getOutputStream());
+			ps.print(b);
+			ps.close();
 		} else if (action.equals("refresh")) {
 			HashMap<String, Integer> users = new HashMap<String, Integer>();
 			HashMap<String, Integer> exercises = new HashMap<String, Integer>();
@@ -46,14 +51,14 @@ public class TeacherServlet extends HttpServlet {
 			for (Entity en : pq.asIterable()) {
 				Exercise ex = new Exercise(en);
 
-				if (!users.containsKey(ex.getUserName())) {
-					users.put(ex.getUserName(), 0);
-					users_count.put(ex.getUserName(), 0);
+				if (!users.containsKey(ex.getId())) {
+					users.put(ex.getId(), 0);
+					users_count.put(ex.getId(), 0);
 				}
-				users.put(ex.getUserName(),
-						users.get(ex.getUserName()) + ex.getPassedTests());
-				users_count.put(ex.getUserName(),
-						users_count.get(ex.getUserName()) + ex.getTotalTests());
+				users.put(ex.getId(),
+						users.get(ex.getId()) + ex.getPassedTests());
+				users_count.put(ex.getId(),
+						users_count.get(ex.getId()) + ex.getTotalTests());
 
 				if (!exercises.containsKey(ex.getExoName())) {
 					exercises.put(ex.getExoName(), 0);
@@ -84,16 +89,12 @@ public class TeacherServlet extends HttpServlet {
 			oos.close();
 		} else if (action.equals("remove")) {
 			String courseName = req.getParameter("course");
-			DatastoreService datastore = DatastoreServiceFactory
-					.getDatastoreService();
 
-			Query q = new Query(Course.KIND).setKeysOnly();
-			q.addFilter("courseName", Query.FilterOperator.EQUAL, courseName);
-
-			PreparedQuery pq = datastore.prepare(q);
-			for (Entity en : pq.asIterable()) {
-				datastore.delete(en.getKey());
-			}
+			boolean b = Course.delete(Course.KIND, courseName);
+			
+			PrintStream ps = new PrintStream(resp.getOutputStream());
+			ps.print(b);
+			ps.close();
 		}
 	}
 }

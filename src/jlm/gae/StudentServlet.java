@@ -1,6 +1,8 @@
 package jlm.gae;
 
 import java.io.IOException;
+import java.io.PrintStream;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
@@ -21,6 +23,11 @@ public class StudentServlet extends HttpServlet {
 
 		Exercise ex = new Exercise(userName, exoName, exoLang, courseName,
 				passedTests, totalTests);
-		ex.save();
+
+		boolean b = ex.save();
+
+		PrintStream ps = new PrintStream(resp.getOutputStream());
+		ps.print(b);
+		ps.close();
 	}
 }
