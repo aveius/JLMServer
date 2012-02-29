@@ -29,7 +29,7 @@ public class TeacherServlet extends HttpServlet {
 			String course = req.getParameter("course");
 
 			Course co = new Course(course);
-			resp.getOutputStream().print(co.save());
+			co.save();
 		} else if (action.equals("refresh")) {
 			HashMap<String, Integer> users = new HashMap<String, Integer>();
 			HashMap<String, Integer> exercises = new HashMap<String, Integer>();
@@ -46,14 +46,14 @@ public class TeacherServlet extends HttpServlet {
 			for (Entity en : pq.asIterable()) {
 				Exercise ex = new Exercise(en);
 
-				if (!users.containsKey(ex.getId())) {
-					users.put(ex.getId(), 0);
-					users_count.put(ex.getId(), 0);
+				if (!users.containsKey(ex.getUserName())) {
+					users.put(ex.getUserName(), 0);
+					users_count.put(ex.getUserName(), 0);
 				}
-				users.put(ex.getId(),
-						users.get(ex.getId()) + ex.getPassedTests());
-				users_count.put(ex.getId(),
-						users_count.get(ex.getId()) + ex.getTotalTests());
+				users.put(ex.getUserName(),
+						users.get(ex.getUserName()) + ex.getPassedTests());
+				users_count.put(ex.getUserName(),
+						users_count.get(ex.getUserName()) + ex.getTotalTests());
 
 				if (!exercises.containsKey(ex.getExoName())) {
 					exercises.put(ex.getExoName(), 0);
@@ -84,7 +84,16 @@ public class TeacherServlet extends HttpServlet {
 			oos.close();
 		} else if (action.equals("remove")) {
 			String courseName = req.getParameter("course");
-			Course.delete(Course.KIND, courseName);
+			DatastoreService datastore = DatastoreServiceFactory
+					.getDatastoreService();
+
+			Query q = new Query(Course.KIND).setKeysOnly();
+			q.addFilter("courseName", Query.FilterOperator.EQUAL, courseName);
+
+			PreparedQuery pq = datastore.prepare(q);
+			for (Entity en : pq.asIterable()) {
+				datastore.delete(en.getKey());
+			}
 		}
 	}
 }

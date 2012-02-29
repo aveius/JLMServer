@@ -8,43 +8,108 @@ public class Exercise extends GAEObject {
 
 	public final static String KIND = "Exercise";
 
+	private String userName;
+	private String exoName;
+	private String exoLang;
+	private String courseName;
+	private int passedTests;
+	private int totalTests;
+	private Date date;
+
 	public Exercise(String userName, String exoName, String exoLang,
 			String courseName, int passedTests, int totalTests) {
-		super(KIND, userName);
+		super(KIND);
+		createKey(exoName);
 
-		this.putData("exoname", exoName);
-		this.putData("exolang", exoLang);
-		this.putData("coursename", courseName);
-		this.putData("passedtests", passedTests);
-		this.putData("totaltests", totalTests);
-		this.putData("date", new Date());
+		this.userName = userName;
+		this.exoName = exoName;
+		this.exoLang = exoLang;
+		this.courseName = courseName;
+		this.passedTests = passedTests;
+		this.totalTests = totalTests;
+		date = new Date();
 	}
 
 	public Exercise(Entity e) {
-		super(KIND, e);
+		super(KIND);
+		key = e.getKey();
+		userName = (String) e.getProperty("username");
+		exoName = (String) e.getProperty("exoname");
+		exoLang = (String) e.getProperty("exolang");
+		courseName = (String) e.getProperty("coursename");
+		passedTests = (Integer) e.getProperty("passedtests");
+		totalTests = (Integer) e.getProperty("totaltests");
+		date = (Date) e.getProperty("date");
+	}
+
+	public void save() {
+		Entity en = new Entity(KIND, key);
+		en.setProperty("username", userName);
+		en.setProperty("exoname", exoName);
+		en.setProperty("exolang", exoLang);
+		en.setProperty("coursename", courseName);
+		en.setProperty("passedtests", passedTests);
+		en.setProperty("totaltests", totalTests);
+		en.setProperty("date", date);
+
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		datastore.put(en);
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getExoName() {
-		return (String) data.get("exoname");
+		return exoName;
+	}
+
+	public void setExoName(String exoName) {
+		this.exoName = exoName;
 	}
 
 	public String getExoLang() {
-		return (String) data.get("exolang");
+		return exoLang;
+	}
+
+	public void setExoLang(String exoLang) {
+		this.exoLang = exoLang;
 	}
 
 	public String getCourseName() {
-		return (String) data.get("coursename");
+		return courseName;
 	}
 
-	public Integer getPassedTests() {
-		return (Integer) data.get("passedtests");
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 
-	public Integer getTotalTests() {
-		return (Integer) data.get("totaltests");
+	public int getPassedTests() {
+		return passedTests;
+	}
+
+	public void setPassedTests(int passedTests) {
+		this.passedTests = passedTests;
+	}
+
+	public int getTotalTests() {
+		return totalTests;
+	}
+
+	public void setTotalTests(int totalTests) {
+		this.totalTests = totalTests;
 	}
 
 	public Date getDate() {
-		return (Date) data.get("date");
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }
