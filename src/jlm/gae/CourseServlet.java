@@ -34,7 +34,7 @@ public class CourseServlet extends HttpServlet {
 
 		for (Entity en : pq.asIterable()) {
 			Course co = new Course(en);
-			courses.add(co.getCourseName());
+			courses.add(co.getId());
 		}
 
 		ObjectOutputStream oos = new ObjectOutputStream(resp.getOutputStream());

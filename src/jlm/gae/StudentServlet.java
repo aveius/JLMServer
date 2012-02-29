@@ -21,6 +21,6 @@ public class StudentServlet extends HttpServlet {
 
 		Exercise ex = new Exercise(userName, exoName, exoLang, courseName,
 				passedTests, totalTests);
-		ex.save();
+		resp.getOutputStream().print(ex.save());
 	}
 }
