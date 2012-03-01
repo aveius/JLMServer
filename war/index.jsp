@@ -26,7 +26,7 @@
                 s = "solved";
             }
         %>
-			<p><%= exercise.getProperty("date") %> &mdash; <b><%= exercise.getProperty("username") %></b> <%= s %> <em><%= exercise.getProperty("exoname")%></em> in <u><%= exercise.getProperty("exolang")%></u>.</p>
+			<p><%= exercise.getProperty("date") %> &mdash; <b><%= exercise.getProperty("id") %></b> <%= s %> <em><%= exercise.getProperty("exoname")%></em> in <u><%= exercise.getProperty("exolang")%></u>.</p>
 		<%
         }
     }
