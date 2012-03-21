@@ -31,7 +31,7 @@ public class CourseServlet extends HttpServlet {
 		}
 
         PrintWriter pw = resp.getWriter();
-        pw.print(jsonArray.toString());
+        pw.print(jsonArray);
         pw.close();
 	}
 }
