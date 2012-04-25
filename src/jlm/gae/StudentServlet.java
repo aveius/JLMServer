@@ -2,6 +2,9 @@ package jlm.gae;
 
 import jlm.gae.models.Exercise;
 import jlm.gae.models.Heartbeat;
+import jlm.gae.models.Join;
+import jlm.gae.models.Leave;
+import jlm.gae.models.Switch;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,26 +38,37 @@ public class StudentServlet extends HttpServlet {
 		try {
 			jsonObject = new JSONObject(jsonRequest);
 			String action = jsonObject.getString("action");
-			String userName = jsonObject.getString("username");
-
-			if (action.equalsIgnoreCase("heartbeat")) {
-				Heartbeat hb = new Heartbeat(userName);
+			String username = jsonObject.getString("username");
+			
+			if (action.equalsIgnoreCase("join")) {
+				Join j = new Join(username);
+				success = j.save();
+			} else if (action.equalsIgnoreCase("leave")) {
+				Leave l = new Leave(username);
+				success = l.save();
+			} else if (action.equalsIgnoreCase("heartbeat")) {
+				Heartbeat hb = new Heartbeat(username);
 				success = hb.save();
 			} else if (action.equalsIgnoreCase("switch")) {
-				
-			} else if (action.equalsIgnoreCase("executed")) {
-				String exoName = jsonObject.getString("exoname");
-				String exoLang = jsonObject.getString("exolang");
-				String courseName = jsonObject.getString("course");
+				String exoname = jsonObject.getString("exoname");
+				String exolang = jsonObject.getString("exolang");
+				String course = jsonObject.getString("course");
 
-				int passedTests = Integer.valueOf(jsonObject
+				Switch sw = new Switch(username, exoname, exolang,
+						course);
+				success = sw.save();
+			} else if (action.equalsIgnoreCase("execute")) {
+				String exoname = jsonObject.getString("exoname");
+				String exolang = jsonObject.getString("exolang");
+				String course = jsonObject.getString("course");
+
+				int passedtests = Integer.valueOf(jsonObject
 						.getString("passedtests"));
-				int totalTests = Integer.valueOf(jsonObject
+				int totaltests = Integer.valueOf(jsonObject
 						.getString("totaltests"));
 
-				Exercise ex = new Exercise(userName, exoName, exoLang,
-						courseName, passedTests, totalTests);
-
+				Exercise ex = new Exercise(username, exoname, exolang,
+						course, passedtests, totaltests);
 				success = ex.save();
 			}
 		} catch (JSONException e) {

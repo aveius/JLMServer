@@ -4,23 +4,20 @@ import java.util.Date;
 
 import com.google.appengine.api.datastore.*;
 
-public class Exercise extends GAEObject {
+public class Switch extends GAEObject {
 
-	public final static String KIND = "exercise";
+	public final static String KIND = "Switch";
 
-	public Exercise(String username, String exoname, String exolang,
-			String course, int passedtests, int totaltests) {
+	public Switch(String username, String exoname, String exolang,
+			String course) {
 		super(KIND, username);
-
 		this.putData("exoname", exoname);
 		this.putData("exolang", exolang);
 		this.putData("course", course);
-		this.putData("passedtests", passedtests);
-		this.putData("totaltests", totaltests);
 		this.putData("date", new Date());
 	}
 
-	public Exercise(Entity e) {
+	public Switch(Entity e) {
 		super(KIND, e);
 	}
 
@@ -34,14 +31,6 @@ public class Exercise extends GAEObject {
 
 	public String getCourse() {
 		return (String) data.get("course");
-	}
-
-	public Integer getPassedTests() {
-		return (Integer) data.get("passedtests");
-	}
-
-	public Integer getTotalTests() {
-		return (Integer) data.get("totaltests");
 	}
 
 	public Date getDate() {

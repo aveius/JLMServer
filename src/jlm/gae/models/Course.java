@@ -4,7 +4,7 @@ import com.google.appengine.api.datastore.Entity;
 
 public class Course extends GAEObject {
 
-	public final static String KIND = "Course";
+	public final static String KIND = "course";
 
 	public Course(String courseName) {
 		super(KIND, courseName);

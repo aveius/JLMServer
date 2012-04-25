@@ -21,14 +21,14 @@ public abstract class GAEObject {
 
 	protected HashMap<String, Object> data;
 
-	public GAEObject(String kind, String id) {
+	protected GAEObject(String kind, String id) {
 		this.kind = kind;
 		this.id = id;
 		key = KeyFactory.createKey(kind, id);
 		data = new HashMap<String, Object>();
 	}
 
-	public GAEObject(String kind, Entity e) {
+	protected GAEObject(String kind, Entity e) {
 		this.kind = kind;
 		key = e.getKey();
 		id = (String) e.getProperty("id");
