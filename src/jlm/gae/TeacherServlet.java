@@ -1,8 +1,7 @@
 package jlm.gae;
 
 import com.google.appengine.api.datastore.*;
-import jlm.gae.json.JSONException;
-import jlm.gae.json.JSONObject;
+
 import jlm.gae.models.Course;
 import jlm.gae.models.Exercise;
 
@@ -10,6 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
