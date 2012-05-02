@@ -34,28 +34,29 @@ public class StudentServlet extends HttpServlet {
 			jsonRequest += line;
 		}
 
-		JSONObject jsonObject;
 		try {
-			jsonObject = new JSONObject(jsonRequest);
+			JSONObject jsonObject = new JSONObject(jsonRequest);
 			String action = jsonObject.getString("action");
 			String username = jsonObject.getString("username");
-			
+
 			if (action.equalsIgnoreCase("join")) {
 				Join j = new Join(username);
+
 				success = j.save();
 			} else if (action.equalsIgnoreCase("leave")) {
 				Leave l = new Leave(username);
+
 				success = l.save();
 			} else if (action.equalsIgnoreCase("heartbeat")) {
 				Heartbeat hb = new Heartbeat(username);
+
 				success = hb.save();
 			} else if (action.equalsIgnoreCase("switch")) {
 				String exoname = jsonObject.getString("exoname");
 				String exolang = jsonObject.getString("exolang");
 				String course = jsonObject.getString("course");
 
-				Switch sw = new Switch(username, exoname, exolang,
-						course);
+				Switch sw = new Switch(username, exoname, exolang, course);
 				success = sw.save();
 			} else if (action.equalsIgnoreCase("execute")) {
 				String exoname = jsonObject.getString("exoname");
@@ -66,15 +67,15 @@ public class StudentServlet extends HttpServlet {
 						.getString("passedtests"));
 				int totaltests = Integer.valueOf(jsonObject
 						.getString("totaltests"));
+				String source = jsonObject.getString("source");
 
-				Exercise ex = new Exercise(username, exoname, exolang,
-						course, passedtests, totaltests);
+				Exercise ex = new Exercise(username, exoname, exolang, course,
+						passedtests, totaltests, source);
 				success = ex.save();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 		PrintStream ps = new PrintStream(resp.getOutputStream());
 		ps.print(success);
 		ps.close();

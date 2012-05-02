@@ -9,7 +9,7 @@ public class Exercise extends GAEObject {
 	public final static String KIND = "exercise";
 
 	public Exercise(String username, String exoname, String exolang,
-			String course, int passedtests, int totaltests) {
+			String course, int passedtests, int totaltests, String source) {
 		super(KIND, username);
 
 		this.putData("exoname", exoname);
@@ -17,6 +17,7 @@ public class Exercise extends GAEObject {
 		this.putData("course", course);
 		this.putData("passedtests", passedtests);
 		this.putData("totaltests", totaltests);
+		this.putData("source", source);
 		this.putData("date", new Date());
 	}
 
@@ -42,6 +43,10 @@ public class Exercise extends GAEObject {
 
 	public Integer getTotalTests() {
 		return (Integer) data.get("totaltests");
+	}
+
+	public String getSource() {
+		return (String) data.get("source");
 	}
 
 	public Date getDate() {

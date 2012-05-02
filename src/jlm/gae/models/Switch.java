@@ -11,6 +11,7 @@ public class Switch extends GAEObject {
 	public Switch(String username, String exoname, String exolang,
 			String course) {
 		super(KIND, username);
+		
 		this.putData("exoname", exoname);
 		this.putData("exolang", exolang);
 		this.putData("course", course);
