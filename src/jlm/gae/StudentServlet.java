@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,48 +34,45 @@ public class StudentServlet extends HttpServlet {
 			jsonRequest += line;
 		}
 
-		try {
-			JSONObject jsonObject = new JSONObject(jsonRequest);
-			String action = jsonObject.getString("action");
-			String username = jsonObject.getString("username");
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonRequest);
+		String action = (String) jsonObject.get("action");
+		String username = (String) jsonObject.get("username");
 
-			if (action.equalsIgnoreCase("join")) {
-				Join j = new Join(username);
+		if (action.equalsIgnoreCase("join")) {
+			Join j = new Join(username);
 
-				success = j.save();
-			} else if (action.equalsIgnoreCase("leave")) {
-				Leave l = new Leave(username);
+			success = j.save();
+		} else if (action.equalsIgnoreCase("leave")) {
+			Leave l = new Leave(username);
 
-				success = l.save();
-			} else if (action.equalsIgnoreCase("heartbeat")) {
-				Heartbeat hb = new Heartbeat(username);
+			success = l.save();
+		} else if (action.equalsIgnoreCase("heartbeat")) {
+			Heartbeat hb = new Heartbeat(username);
 
-				success = hb.save();
-			} else if (action.equalsIgnoreCase("switch")) {
-				String exoname = jsonObject.getString("exoname");
-				String exolang = jsonObject.getString("exolang");
-				String course = jsonObject.getString("course");
+			success = hb.save();
+		} else if (action.equalsIgnoreCase("switch")) {
+			String exoname = (String) jsonObject.get("exoname");
+			String exolang = (String) jsonObject.get("exolang");
+			String course = (String) jsonObject.get("course");
 
-				Switch sw = new Switch(username, exoname, exolang, course);
-				success = sw.save();
-			} else if (action.equalsIgnoreCase("execute")) {
-				String exoname = jsonObject.getString("exoname");
-				String exolang = jsonObject.getString("exolang");
-				String course = jsonObject.getString("course");
+			Switch sw = new Switch(username, exoname, exolang, course);
+			success = sw.save();
+		} else if (action.equalsIgnoreCase("execute")) {
+			String exoname = (String) jsonObject.get("exoname");
+			String exolang = (String) jsonObject.get("exolang");
+			String course = (String) jsonObject.get("course");
 
-				int passedtests = Integer.valueOf(jsonObject
-						.getString("passedtests"));
-				int totaltests = Integer.valueOf(jsonObject
-						.getString("totaltests"));
-				String source = jsonObject.getString("source");
+			int passedtests = Integer.valueOf((String) jsonObject
+					.get("passedtests"));
+			int totaltests = Integer.valueOf((String) jsonObject
+					.get("totaltests"));
+			String source = (String) jsonObject.get("source");
 
-				Exercise ex = new Exercise(username, exoname, exolang, course,
-						passedtests, totaltests, source);
-				success = ex.save();
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+			Exercise ex = new Exercise(username, exoname, exolang, course,
+					passedtests, totaltests, source);
+			success = ex.save();
 		}
+
 		PrintStream ps = new PrintStream(resp.getOutputStream());
 		ps.print(success);
 		ps.close();

@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,11 +30,9 @@ public class CourseServlet extends HttpServlet {
 		while ((line = br.readLine()) != null) {
 			jsonRequest += line;
 		}
-
-		try {
-			JSONObject jsonObject = new JSONObject(jsonRequest);
-			String action = jsonObject.getString("action");
-			
+			JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonRequest);
+			String action = (String) jsonObject.get("action");
+						
 			if (action.equalsIgnoreCase("allids")) {
 				
 				JSONArray jsonArray = new JSONArray();
@@ -46,10 +44,10 @@ public class CourseServlet extends HttpServlet {
 
 				PreparedQuery pq = datastore.prepare(q);
 
-				jsonArray.put("test");
+				jsonArray.add("test");
 				for (Entity en : pq.asIterable()) {
 					Course co = new Course(en);
-					jsonArray.put(co.getId());
+					jsonArray.add(co.getId());
 				}
 
 				System.out.println(jsonArray);
@@ -57,8 +55,5 @@ public class CourseServlet extends HttpServlet {
 				pw.print(jsonArray);
 				pw.close();
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 	}
 }
