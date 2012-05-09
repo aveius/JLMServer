@@ -32,7 +32,8 @@ public class TeacherServlet extends HttpServlet {
 		BufferedReader br = req.getReader();
 		String line;
 		boolean password_ok = false;
-
+		Answer answer = Answer.ALL_IS_FINE;
+		
 		while ((line = br.readLine()) != null) {
 			jsonRequest += line;
 		}
@@ -54,23 +55,15 @@ public class TeacherServlet extends HttpServlet {
 		}
 
 		if (action.equalsIgnoreCase("new")) {
-			Answer answer = Answer.ALL_IS_FINE;
-
 			String password = (String) jsonObject.get("password");
 
 			Course co = new Course(course, password, teacher_password);
 
 			answer = co.save();
-			
-			PrintStream ps = new PrintStream(resp.getOutputStream());
-			ps.print(answer);
-			ps.close();
 		} else if (password_ok) {
 			if (action.equalsIgnoreCase("refresh")) {
 				// TODO
 			} else if (action.equalsIgnoreCase("remove")) {
-				Answer answer = Answer.ALL_IS_FINE;
-
 				q = new Query(Course.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
 				pq = datastore.prepare(q);
@@ -83,15 +76,13 @@ public class TeacherServlet extends HttpServlet {
 				if (co != null) {
 					answer = co.delete();
 				}
-
-				PrintStream ps = new PrintStream(resp.getOutputStream());
-				ps.print(answer);
-				ps.close();
 			}
 		} else {
-			PrintStream ps = new PrintStream(resp.getOutputStream());
-			ps.print(Answer.WRONG_PASSWORD);
-			ps.close();
+			answer = Answer.WRONG_PASSWORD;
 		}
+		
+		PrintStream ps = new PrintStream(resp.getOutputStream());
+		ps.print(answer.ordinal());
+		ps.close();
 	}
 }

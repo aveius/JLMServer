@@ -103,7 +103,7 @@ public class StudentServlet extends HttpServlet {
 		}
 
 		PrintStream ps = new PrintStream(resp.getOutputStream());
-		ps.print(answer);
+		ps.print(answer.ordinal());
 		ps.close();
 	}
 }
