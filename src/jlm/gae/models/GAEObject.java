@@ -24,15 +24,15 @@ public abstract class GAEObject {
 		return entity.getProperty(key);
 	}
 	
-	public abstract boolean save();
+	public abstract Answer save();
 
-	public boolean delete() {
+	public Answer delete() {
 		if (entity.getKey() != null) {
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
 			datastore.delete(entity.getKey());
-			return true;
+			return Answer.ALL_IS_FINE;
 		}
-		return false;
+		return Answer.DATA_NOT_IN_DATABASE;
 	}
 }

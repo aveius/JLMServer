@@ -34,7 +34,7 @@ public class Course extends GAEObject {
 	}
 
 	@Override
-	public boolean save() {
+	public Answer save() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 
@@ -42,10 +42,10 @@ public class Course extends GAEObject {
 		q.addFilter("course", Query.FilterOperator.EQUAL, getCourse());
 		PreparedQuery pq = datastore.prepare(q);
 		if (pq.asIterator().hasNext()) {
-			return false;
+			return Answer.COURSE_NAME_ALREADY_USED;
 		}
 		
 		datastore.put(entity);
-		return true;
+		return Answer.ALL_IS_FINE;
 	}
 }

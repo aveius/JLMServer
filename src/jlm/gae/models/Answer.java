@@ -1,0 +1,5 @@
+package jlm.gae.models;
+
+public enum Answer {
+	ALL_IS_FINE, WRONG_PASSWORD, WRONG_TEACHER_PASSWORD, COURSE_NAME_ALREADY_USED, DATA_NOT_IN_DATABASE
+}

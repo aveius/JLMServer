@@ -1,6 +1,7 @@
 package jlm.gae;
 
 import jlm.gae.models.Course;
+import jlm.gae.models.Answer;
 import jlm.gae.models.Exercise;
 import jlm.gae.models.Heartbeat;
 import jlm.gae.models.Help;
@@ -35,7 +36,7 @@ public class StudentServlet extends HttpServlet {
 		String jsonRequest = "";
 		BufferedReader br = req.getReader();
 		String line;
-		boolean success = false;
+		Answer answer = Answer.ALL_IS_FINE;
 		boolean password_ok = false;
 
 		while ((line = br.readLine()) != null) {
@@ -62,22 +63,22 @@ public class StudentServlet extends HttpServlet {
 			if (action.equalsIgnoreCase("join")) {
 				Join j = new Join(username, course, password);
 
-				success = j.save();
+				answer = j.save();
 			} else if (action.equalsIgnoreCase("leave")) {
 				Leave l = new Leave(username, course, password);
 
-				success = l.save();
+				answer = l.save();
 			} else if (action.equalsIgnoreCase("heartbeat")) {
 				Heartbeat hb = new Heartbeat(username, course, password);
 
-				success = hb.save();
+				answer = hb.save();
 			} else if (action.equalsIgnoreCase("switch")) {
 				String exoname = (String) jsonObject.get("exoname");
 				String exolang = (String) jsonObject.get("exolang");
 
 				Switch sw = new Switch(username, course, password, exoname,
 						exolang);
-				success = sw.save();
+				answer = sw.save();
 			} else if (action.equalsIgnoreCase("execute")) {
 				String exoname = (String) jsonObject.get("exoname");
 				String exolang = (String) jsonObject.get("exolang");
@@ -90,17 +91,17 @@ public class StudentServlet extends HttpServlet {
 
 				Exercise ex = new Exercise(username, exoname, exolang, course,
 						passedtests, totaltests, source);
-				success = ex.save();
+				answer = ex.save();
 			} else if (action.equalsIgnoreCase("help")) {
 				String status = (String) jsonObject.get("status");
 
 				Help he = new Help(username, course, password, status);
-				success = he.save();
+				answer = he.save();
 			}
 		}
 
 		PrintStream ps = new PrintStream(resp.getOutputStream());
-		ps.print(success);
+		ps.print(answer);
 		ps.close();
 	}
 }

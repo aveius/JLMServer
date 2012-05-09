@@ -48,10 +48,10 @@ public class Switch extends GAEObject {
 	}
 
 	@Override
-	public boolean save() {
+	public Answer save() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		datastore.put(entity);
-		return true;
+		return Answer.ALL_IS_FINE;
 	}
 }

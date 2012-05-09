@@ -1,6 +1,7 @@
 package jlm.gae;
 
 import jlm.gae.models.Course;
+import jlm.gae.models.Answer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,22 +54,22 @@ public class TeacherServlet extends HttpServlet {
 		}
 
 		if (action.equalsIgnoreCase("new")) {
-			boolean success = false;
+			Answer answer = Answer.ALL_IS_FINE;
 
 			String password = (String) jsonObject.get("password");
 
 			Course co = new Course(course, password, teacher_password);
 
-			success = co.save();
+			answer = co.save();
 			
 			PrintStream ps = new PrintStream(resp.getOutputStream());
-			ps.print(success);
+			ps.print(answer);
 			ps.close();
 		} else if (password_ok) {
 			if (action.equalsIgnoreCase("refresh")) {
 				// TODO
 			} else if (action.equalsIgnoreCase("remove")) {
-				boolean success = false;
+				Answer answer = Answer.ALL_IS_FINE;
 
 				q = new Query(Course.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
@@ -80,11 +81,11 @@ public class TeacherServlet extends HttpServlet {
 				}
 
 				if (co != null) {
-					success = co.delete();
+					answer = co.delete();
 				}
 
 				PrintStream ps = new PrintStream(resp.getOutputStream());
-				ps.print(success);
+				ps.print(answer);
 				ps.close();
 			}
 		}
