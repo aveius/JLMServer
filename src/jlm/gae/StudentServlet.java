@@ -98,6 +98,8 @@ public class StudentServlet extends HttpServlet {
 				Help he = new Help(username, course, password, status);
 				answer = he.save();
 			}
+		} else {
+			answer = Answer.WRONG_PASSWORD;
 		}
 
 		PrintStream ps = new PrintStream(resp.getOutputStream());

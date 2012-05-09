@@ -88,6 +88,10 @@ public class TeacherServlet extends HttpServlet {
 				ps.print(answer);
 				ps.close();
 			}
+		} else {
+			PrintStream ps = new PrintStream(resp.getOutputStream());
+			ps.print(Answer.WRONG_PASSWORD);
+			ps.close();
 		}
 	}
 }
