@@ -1,7 +1,9 @@
 package jlm.gae;
 
+import jlm.gae.models.Course;
 import jlm.gae.models.Exercise;
 import jlm.gae.models.Heartbeat;
+import jlm.gae.models.Help;
 import jlm.gae.models.Join;
 import jlm.gae.models.Leave;
 import jlm.gae.models.Switch;
@@ -10,6 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
@@ -29,6 +36,7 @@ public class StudentServlet extends HttpServlet {
 		BufferedReader br = req.getReader();
 		String line;
 		boolean success = false;
+		boolean password_ok = false;
 
 		while ((line = br.readLine()) != null) {
 			jsonRequest += line;
@@ -37,40 +45,58 @@ public class StudentServlet extends HttpServlet {
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonRequest);
 		String action = (String) jsonObject.get("action");
 		String username = (String) jsonObject.get("username");
+		String course = (String) jsonObject.get("course");
+		String password = (String) jsonObject.get("password");
 
-		if (action.equalsIgnoreCase("join")) {
-			Join j = new Join(username);
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Course.KIND);
+		q.addFilter("course", Query.FilterOperator.EQUAL, course);
+		q.addFilter("password", Query.FilterOperator.EQUAL, password);
+		PreparedQuery pq = datastore.prepare(q);
+		if (pq.asIterator().hasNext()) {
+			password_ok = true;
+		}
 
-			success = j.save();
-		} else if (action.equalsIgnoreCase("leave")) {
-			Leave l = new Leave(username);
+		if (password_ok) {
+			if (action.equalsIgnoreCase("join")) {
+				Join j = new Join(username, course, password);
 
-			success = l.save();
-		} else if (action.equalsIgnoreCase("heartbeat")) {
-			Heartbeat hb = new Heartbeat(username);
+				success = j.save();
+			} else if (action.equalsIgnoreCase("leave")) {
+				Leave l = new Leave(username, course, password);
 
-			success = hb.save();
-		} else if (action.equalsIgnoreCase("switch")) {
-			String exoname = (String) jsonObject.get("exoname");
-			String exolang = (String) jsonObject.get("exolang");
-			String course = (String) jsonObject.get("course");
+				success = l.save();
+			} else if (action.equalsIgnoreCase("heartbeat")) {
+				Heartbeat hb = new Heartbeat(username, course, password);
 
-			Switch sw = new Switch(username, exoname, exolang, course);
-			success = sw.save();
-		} else if (action.equalsIgnoreCase("execute")) {
-			String exoname = (String) jsonObject.get("exoname");
-			String exolang = (String) jsonObject.get("exolang");
-			String course = (String) jsonObject.get("course");
+				success = hb.save();
+			} else if (action.equalsIgnoreCase("switch")) {
+				String exoname = (String) jsonObject.get("exoname");
+				String exolang = (String) jsonObject.get("exolang");
 
-			int passedtests = Integer.valueOf((String) jsonObject
-					.get("passedtests"));
-			int totaltests = Integer.valueOf((String) jsonObject
-					.get("totaltests"));
-			String source = (String) jsonObject.get("source");
+				Switch sw = new Switch(username, course, password, exoname,
+						exolang);
+				success = sw.save();
+			} else if (action.equalsIgnoreCase("execute")) {
+				String exoname = (String) jsonObject.get("exoname");
+				String exolang = (String) jsonObject.get("exolang");
 
-			Exercise ex = new Exercise(username, exoname, exolang, course,
-					passedtests, totaltests, source);
-			success = ex.save();
+				int passedtests = Integer.valueOf((String) jsonObject
+						.get("passedtests"));
+				int totaltests = Integer.valueOf((String) jsonObject
+						.get("totaltests"));
+				String source = (String) jsonObject.get("source");
+
+				Exercise ex = new Exercise(username, exoname, exolang, course,
+						passedtests, totaltests, source);
+				success = ex.save();
+			} else if (action.equalsIgnoreCase("help")) {
+				String status = (String) jsonObject.get("status");
+
+				Help he = new Help(username, course, password, status);
+				success = he.save();
+			}
 		}
 
 		PrintStream ps = new PrintStream(resp.getOutputStream());

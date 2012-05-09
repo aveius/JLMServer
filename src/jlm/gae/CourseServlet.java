@@ -17,12 +17,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@SuppressWarnings("serial")
 public class CourseServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
 		String jsonRequest = "";
 		BufferedReader br = req.getReader();
 		String line;
@@ -30,30 +30,25 @@ public class CourseServlet extends HttpServlet {
 		while ((line = br.readLine()) != null) {
 			jsonRequest += line;
 		}
-			JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonRequest);
-			String action = (String) jsonObject.get("action");
-						
-			if (action.equalsIgnoreCase("allids")) {
-				
-				JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonRequest);
+		String action = (String) jsonObject.get("action");
 
-				DatastoreService datastore = DatastoreServiceFactory
-						.getDatastoreService();
+		if (action.equalsIgnoreCase("allids")) {
 
-				Query q = new Query(Course.KIND);
+			JSONArray jsonArray = new JSONArray();
 
-				PreparedQuery pq = datastore.prepare(q);
-
-				jsonArray.add("test");
-				for (Entity en : pq.asIterable()) {
-					Course co = new Course(en);
-					jsonArray.add(co.getId());
-				}
-
-				System.out.println(jsonArray);
-				PrintWriter pw = resp.getWriter();
-				pw.print(jsonArray);
-				pw.close();
+			DatastoreService datastore = DatastoreServiceFactory
+					.getDatastoreService();
+			Query q = new Query(Course.KIND);
+			PreparedQuery pq = datastore.prepare(q);
+			for (Entity en : pq.asIterable()) {
+				Course co = new Course(en);
+				jsonArray.add(co.getCourse());
 			}
+
+			PrintWriter pw = resp.getWriter();
+			pw.print(jsonArray);
+			pw.close();
+		}
 	}
 }

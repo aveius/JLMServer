@@ -10,46 +10,58 @@ public class Exercise extends GAEObject {
 
 	public Exercise(String username, String exoname, String exolang,
 			String course, int passedtests, int totaltests, String source) {
-		super(KIND, username);
-
-		this.putData("exoname", exoname);
-		this.putData("exolang", exolang);
-		this.putData("course", course);
-		this.putData("passedtests", passedtests);
-		this.putData("totaltests", totaltests);
-		this.putData("source", source);
-		this.putData("date", new Date());
+		super(KIND);
+		put("username", username);
+		put("exoname", exoname);
+		put("exolang", exolang);
+		put("course", course);
+		put("passedtests", passedtests);
+		put("totaltests", totaltests);
+		put("source", source);
+		put("date", new Date());
 	}
 
 	public Exercise(Entity e) {
-		super(KIND, e);
+		super(e);
+	}
+
+	public String getUsername() {
+		return (String) get("username");
 	}
 
 	public String getExoName() {
-		return (String) data.get("exoname");
+		return (String) get("exoname");
 	}
 
 	public String getExoLang() {
-		return (String) data.get("exolang");
+		return (String) get("exolang");
 	}
 
 	public String getCourse() {
-		return (String) data.get("course");
+		return (String) get("course");
 	}
 
 	public Integer getPassedTests() {
-		return (Integer) data.get("passedtests");
+		return (Integer) get("passedtests");
 	}
 
 	public Integer getTotalTests() {
-		return (Integer) data.get("totaltests");
+		return (Integer) get("totaltests");
 	}
 
 	public String getSource() {
-		return (String) data.get("source");
+		return (String) get("source");
 	}
 
 	public Date getDate() {
-		return (Date) data.get("date");
+		return (Date) get("date");
+	}
+
+	@Override
+	public boolean save() {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		datastore.put(entity);
+		return true;
 	}
 }

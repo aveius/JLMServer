@@ -7,13 +7,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Iterator;
 
+@SuppressWarnings("serial")
 public class TeacherServlet extends HttpServlet {
 
 	@Override
@@ -22,6 +30,7 @@ public class TeacherServlet extends HttpServlet {
 		String jsonRequest = "";
 		BufferedReader br = req.getReader();
 		String line;
+		boolean password_ok = false;
 
 		while ((line = br.readLine()) != null) {
 			jsonRequest += line;
@@ -29,26 +38,55 @@ public class TeacherServlet extends HttpServlet {
 
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonRequest);
 		String action = (String) jsonObject.get("action");
+		String course = (String) jsonObject.get("course");
+		String teacher_password = (String) jsonObject.get("teacher_password");
+
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Course.KIND);
+		q.addFilter("course", Query.FilterOperator.EQUAL, course);
+		q.addFilter("teacher_password", Query.FilterOperator.EQUAL,
+				teacher_password);
+		PreparedQuery pq = datastore.prepare(q);
+		if (pq.asIterator().hasNext()) {
+			password_ok = true;
+		}
 
 		if (action.equalsIgnoreCase("new")) {
-			String course = (String) jsonObject.get("course");
+			boolean success = false;
+
 			String password = (String) jsonObject.get("password");
-			String teacher_password = (String) jsonObject
-					.get("teacher_password");
 
 			Course co = new Course(course, password, teacher_password);
 
+			success = co.save();
+			
 			PrintStream ps = new PrintStream(resp.getOutputStream());
-			ps.print(co.save());
+			ps.print(success);
 			ps.close();
-		} else if (action.equalsIgnoreCase("refresh")) {
-			// TODO
-		} else if (action.equalsIgnoreCase("remove")) {
-			String courseName = req.getParameter("course");
+		} else if (password_ok) {
+			if (action.equalsIgnoreCase("refresh")) {
+				// TODO
+			} else if (action.equalsIgnoreCase("remove")) {
+				boolean success = false;
 
-			PrintStream ps = new PrintStream(resp.getOutputStream());
-			ps.print(Course.delete(Course.KIND, courseName));
-			ps.close();
+				q = new Query(Course.KIND);
+				q.addFilter("course", Query.FilterOperator.EQUAL, course);
+				pq = datastore.prepare(q);
+				Course co = null;
+				Iterator<Entity> iten = pq.asIterator();
+				if (iten.hasNext()) {
+					co = new Course(pq.asIterator().next());
+				}
+
+				if (co != null) {
+					success = co.delete();
+				}
+
+				PrintStream ps = new PrintStream(resp.getOutputStream());
+				ps.print(success);
+				ps.close();
+			}
 		}
 	}
 }

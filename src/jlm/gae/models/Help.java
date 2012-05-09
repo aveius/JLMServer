@@ -2,24 +2,24 @@ package jlm.gae.models;
 
 import java.util.Date;
 
-import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 
-public class Switch extends GAEObject {
+public class Help extends GAEObject {
 
-	public final static String KIND = "Switch";
+	public final static String KIND = "Help";
 
-	public Switch(String username, String course, String password,
-			String exoname, String exolang) {
+	public Help(String username, String course, String password, String status) {
 		super(KIND);
 		put("username", username);
 		put("course", course);
 		put("password", password);
-		put("exoname", exoname);
-		put("exolang", exolang);
+		put("status", status);
 		put("date", new Date());
 	}
 
-	public Switch(Entity e) {
+	public Help(Entity e) {
 		super(e);
 	}
 
@@ -35,14 +35,10 @@ public class Switch extends GAEObject {
 		return (String) get("password");
 	}
 
-	public String getExoName() {
-		return (String) get("exoname");
+	public String getStatus() {
+		return (String) get("status");
 	}
-
-	public String getExoLang() {
-		return (String) get("exolang");
-	}
-
+	
 	public Date getDate() {
 		return (Date) get("date");
 	}
