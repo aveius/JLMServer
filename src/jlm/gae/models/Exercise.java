@@ -1,6 +1,6 @@
 package jlm.gae.models;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.google.appengine.api.datastore.*;
 
@@ -18,7 +18,7 @@ public class Exercise extends GAEObject {
 		put("passedtests", passedtests);
 		put("totaltests", totaltests);
 		put("source", source);
-		put("date", new Date());
+		put("date", new GregorianCalendar());
 	}
 
 	public Exercise(Entity e) {
@@ -53,8 +53,8 @@ public class Exercise extends GAEObject {
 		return (String) get("source");
 	}
 
-	public Date getDate() {
-		return (Date) get("date");
+	public GregorianCalendar getDate() {
+		return (GregorianCalendar) get("date");
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package jlm.gae.models;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -14,9 +14,8 @@ public class Help extends GAEObject {
 		super(KIND);
 		put("username", username);
 		put("course", course);
-		put("password", password);
 		put("status", status);
-		put("date", new Date());
+		put("date", new GregorianCalendar());
 	}
 
 	public Help(Entity e) {
@@ -31,16 +30,12 @@ public class Help extends GAEObject {
 		return (String) get("course");
 	}
 
-	public String getPassword() {
-		return (String) get("password");
-	}
-
 	public String getStatus() {
 		return (String) get("status");
 	}
 	
-	public Date getDate() {
-		return (Date) get("date");
+	public GregorianCalendar getDate() {
+		return (GregorianCalendar) get("date");
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package jlm.gae;
+package jlm.gae.servlets;
 
 import jlm.gae.models.Course;
 import jlm.gae.models.Answer;

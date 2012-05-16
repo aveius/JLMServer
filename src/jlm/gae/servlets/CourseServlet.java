@@ -1,4 +1,4 @@
-package jlm.gae;
+package jlm.gae.servlets;
 
 import com.google.appengine.api.datastore.*;
 

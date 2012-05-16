@@ -7,7 +7,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
     <servlet>
         <servlet-name>StudentServlet</servlet-name>
-        <servlet-class>jlm.gae.StudentServlet</servlet-class>
+        <servlet-class>jlm.gae.servlets.StudentServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StudentServlet</servlet-name>
@@ -16,7 +16,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
     <servlet>
         <servlet-name>TeacherServlet</servlet-name>
-        <servlet-class>jlm.gae.TeacherServlet</servlet-class>
+        <servlet-class>jlm.gae.servlets.TeacherServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TeacherServlet</servlet-name>
@@ -25,7 +25,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
     <servlet>
         <servlet-name>CourseServlet</servlet-name>
-        <servlet-class>jlm.gae.CourseServlet</servlet-class>
+        <servlet-class>jlm.gae.servlets.CourseServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CourseServlet</servlet-name>
