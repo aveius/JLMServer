@@ -1,6 +1,6 @@
 package jlm.gae.models;
 
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -14,7 +14,7 @@ public class Heartbeat extends GAEObject {
 		super(KIND);
 		put("username", username);
 		put("course", course);
-		put("date", new GregorianCalendar());
+		put("date", new Date());
 	}
 
 	public Heartbeat(Entity e) {
@@ -29,8 +29,8 @@ public class Heartbeat extends GAEObject {
 		return (String) get("course");
 	}
 
-	public GregorianCalendar getDate() {
-		return (GregorianCalendar) get("date");
+	public Date getDate() {
+		return (Date) get("date");
 	}
 
 	@Override

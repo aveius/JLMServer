@@ -1,6 +1,6 @@
 package jlm.gae.models;
 
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 import com.google.appengine.api.datastore.*;
 
@@ -15,7 +15,7 @@ public class Switch extends GAEObject {
 		put("course", course);
 		put("exoname", exoname);
 		put("exolang", exolang);
-		put("date", new GregorianCalendar());
+		put("date", new Date());
 	}
 
 	public Switch(Entity e) {
@@ -38,8 +38,8 @@ public class Switch extends GAEObject {
 		return (String) get("exolang");
 	}
 
-	public GregorianCalendar getDate() {
-		return (GregorianCalendar) get("date");
+	public Date getDate() {
+		return (Date) get("date");
 	}
 
 	@Override

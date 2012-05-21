@@ -1,6 +1,6 @@
 package jlm.gae.data;
 
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 public class ExerciseData {
 
@@ -9,7 +9,7 @@ public class ExerciseData {
 	private int passedTests;
 	private int totalTests;
 	private String source;
-	private GregorianCalendar date;
+	private Date date;
 	
 	public String getName() {
 		return name;
@@ -51,11 +51,11 @@ public class ExerciseData {
 		this.source = source;
 	}
 	
-	public GregorianCalendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 	
-	public void setDate(GregorianCalendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 	

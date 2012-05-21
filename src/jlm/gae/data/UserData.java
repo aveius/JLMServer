@@ -1,16 +1,16 @@
 package jlm.gae.data;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 
 public class UserData {
 
 	private String username;
 	private List<ExerciseData> exercises;
-	private GregorianCalendar lastJoin;
-	private GregorianCalendar lastLeave;
-	private GregorianCalendar lastHeartbeat;
+	private Date lastJoin;
+	private Date lastLeave;
+	private Date lastHeartbeat;
 	
 	public UserData() {
 		exercises = new ArrayList<ExerciseData>();
@@ -28,27 +28,27 @@ public class UserData {
 		return exercises;
 	}
 	
-	public GregorianCalendar getLastJoin() {
+	public Date getLastJoin() {
 		return lastJoin;
 	}
 	
-	public void setLastJoin(GregorianCalendar lastJoin) {
+	public void setLastJoin(Date lastJoin) {
 		this.lastJoin = lastJoin;
 	}
 	
-	public GregorianCalendar getLastLeave() {
+	public Date getLastLeave() {
 		return lastLeave;
 	}
 	
-	public void setLastLeave(GregorianCalendar lastLeave) {
+	public void setLastLeave(Date lastLeave) {
 		this.lastLeave = lastLeave;
 	}
 	
-	public GregorianCalendar getLastHeartbeat() {
+	public Date getLastHeartbeat() {
 		return lastHeartbeat;
 	}
 	
-	public void setLastHeartbeat(GregorianCalendar lastHeartbeat) {
+	public void setLastHeartbeat(Date lastHeartbeat) {
 		this.lastHeartbeat = lastHeartbeat;
 	}
 	

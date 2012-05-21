@@ -26,7 +26,7 @@ import net.minidev.json.JSONValue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -71,8 +71,8 @@ public class TeacherServlet extends HttpServlet {
 			answer = co.save();
 		} else if (password_ok) {
 			if (action.equalsIgnoreCase("refresh")) {
-				GregorianCalendar last2Hours = new GregorianCalendar();
-				last2Hours.setTimeInMillis(last2Hours.getTimeInMillis() - 2 * 60 * 60 * 1000);
+				Date last2Hours = new Date();
+				last2Hours.setTime(last2Hours.getTime() - 2 * 24 * 60 * 60 * 1000);
 				Map<String,UserData> map = new HashMap<String,UserData>();
 
 				// Recupère les utilisateurs avec les Join
