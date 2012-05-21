@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -25,6 +26,7 @@ import net.minidev.json.JSONValue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Iterator;
 
 @SuppressWarnings("serial")
 public class StudentServlet extends HttpServlet {
@@ -53,12 +55,24 @@ public class StudentServlet extends HttpServlet {
 				.getDatastoreService();
 		Query q = new Query(Course.KIND);
 		q.addFilter("course", Query.FilterOperator.EQUAL, course);
-		q.addFilter("password", Query.FilterOperator.EQUAL, password);
 		PreparedQuery pq = datastore.prepare(q);
-		if (pq.asIterator().hasNext()) {
-			password_ok = true;
+		Iterator<Entity> iten = pq.asIterator();
+		
+		boolean founded = false;
+		while (iten.hasNext()) {
+			Course co = new Course(iten.next());
+			if (co.getCourse().equalsIgnoreCase(course)) {
+				founded = true;
+				if (co.getPassword().equalsIgnoreCase(password)) {
+					password_ok = true;
+				}
+			}
 		}
 
+		if (!founded) {
+			answer = Answer.DATA_NOT_IN_DATABASE;
+		}
+		
 		if (password_ok) {
 			if (action.equalsIgnoreCase("join")) {
 				Join j = new Join(username, course, password);

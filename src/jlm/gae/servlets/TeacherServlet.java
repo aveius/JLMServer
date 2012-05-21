@@ -1,6 +1,7 @@
 package jlm.gae.servlets;
 
 import com.google.appengine.api.datastore.*;
+
 import jlm.gae.data.ExerciseData;
 import jlm.gae.data.UserData;
 import jlm.gae.models.*;
@@ -39,18 +40,29 @@ public class TeacherServlet extends HttpServlet {
 		String action = (String) jsonObject.get("action");
 		String course = (String) jsonObject.get("course");
 		String teacher_password = (String) jsonObject.get("teacher_password");
-
+		
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query q = new Query(Course.KIND);
 		q.addFilter("course", Query.FilterOperator.EQUAL, course);
-		q.addFilter("teacher_password", Query.FilterOperator.EQUAL,
-				teacher_password);
 		PreparedQuery pq = datastore.prepare(q);
-		if (pq.asIterator().hasNext()) {
-			password_ok = true;
+		Iterator<Entity> iten = pq.asIterator();
+		
+		boolean founded = false;
+		while (iten.hasNext()) {
+			Course co = new Course(iten.next());
+			if (co.getCourse().equalsIgnoreCase(course)) {
+				founded = true;
+				if (co.getTeacherPassword().equalsIgnoreCase(teacher_password)) {
+					password_ok = true;
+				}
+			}
 		}
 
+		if (!founded) {
+			answer = Answer.DATA_NOT_IN_DATABASE;
+		}
+		
 		if (action.equalsIgnoreCase("new")) {
 			String password = (String) jsonObject.get("password");
 
@@ -68,7 +80,7 @@ public class TeacherServlet extends HttpServlet {
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
 				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
 				pq = datastore.prepare(q);
-				Iterator<Entity> iten = pq.asIterator();
+				iten = pq.asIterator();
 				if (iten.hasNext()) {
 					Join j = new Join(pq.asIterator().next());
 					if (map.containsKey(j.getUsername())) {
@@ -146,7 +158,7 @@ public class TeacherServlet extends HttpServlet {
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
 				pq = datastore.prepare(q);
 				Course co = null;
-				Iterator<Entity> iten = pq.asIterator();
+				iten = pq.asIterator();
 				if (iten.hasNext()) {
 					co = new Course(pq.asIterator().next());
 				}
