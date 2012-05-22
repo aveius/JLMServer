@@ -58,18 +58,18 @@ public class StudentServlet extends HttpServlet {
 		PreparedQuery pq = datastore.prepare(q);
 		Iterator<Entity> iten = pq.asIterator();
 		
-		boolean founded = false;
+		boolean found = false;
 		while (iten.hasNext()) {
 			Course co = new Course(iten.next());
 			if (co.getCourse().equalsIgnoreCase(course)) {
-				founded = true;
+				found = true;
 				if (co.getPassword().equalsIgnoreCase(password)) {
 					password_ok = true;
 				}
 			}
 		}
 
-		if (!founded) {
+		if (!found) {
 			answer = Answer.DATA_NOT_IN_DATABASE;
 		}
 		
