@@ -19,4 +19,14 @@
         <property name="username" direction="asc"/>
         <property name="date" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="Help" ancestor="false" source="manual">
+        <property name="course" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Join" ancestor="false" source="manual">
+        <property name="course" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>
