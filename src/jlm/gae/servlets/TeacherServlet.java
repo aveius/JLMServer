@@ -39,14 +39,14 @@ public class TeacherServlet extends HttpServlet {
 		String action = (String) jsonObject.get("action");
 		String course = (String) jsonObject.get("course");
 		String teacher_password = (String) jsonObject.get("teacher_password");
-		
+
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query q = new Query(Course.KIND);
 		q.addFilter("course", Query.FilterOperator.EQUAL, course);
 		PreparedQuery pq = datastore.prepare(q);
 		Iterator<Entity> iten = pq.asIterator();
-		
+
 		boolean founded = false;
 		while (iten.hasNext()) {
 			Course co = new Course(iten.next());
@@ -61,7 +61,7 @@ public class TeacherServlet extends HttpServlet {
 		if (!founded) {
 			answer = Answer.DATA_NOT_IN_DATABASE;
 		}
-		
+
 		if (action.equalsIgnoreCase("new")) {
 			String password = (String) jsonObject.get("password");
 
@@ -89,7 +89,7 @@ public class TeacherServlet extends HttpServlet {
 						map.put(j.getUsername(),u);
 					}
 				}
-				
+
 				// foreach user
 				for (String username : map.keySet()) {
 					// get all data since last leave
@@ -108,7 +108,7 @@ public class TeacherServlet extends HttpServlet {
 							}
 						}
 					}
-					
+
 					// get the last heartbeat
 					q = new Query(Heartbeat.KIND);
 					q.addFilter("username", Query.FilterOperator.EQUAL, username);
@@ -125,7 +125,7 @@ public class TeacherServlet extends HttpServlet {
 							}
 						}
 					}
-					
+
 					// get all exercises
 					q = new Query(Exercise.KIND);
 					q.addFilter("username", Query.FilterOperator.EQUAL, username);
@@ -136,7 +136,7 @@ public class TeacherServlet extends HttpServlet {
 					while (iten.hasNext()) {
 						Exercise e = new Exercise(iten.next());
 						UserData u = map.get(username);
-						
+
 						ExerciseData ue = new ExerciseData();
 						ue.setName(e.getExoName());
 						ue.setLang(e.getExoLang());
@@ -148,7 +148,7 @@ public class TeacherServlet extends HttpServlet {
 						u.getExercises().add(ue);
 					}
 				}
-				
+
 				PrintStream ps = new PrintStream(resp.getOutputStream());
 				ps.print(JSONValue.toJSONString(map));
                 System.out.println(map);
@@ -171,7 +171,7 @@ public class TeacherServlet extends HttpServlet {
 		} else {
 			answer = Answer.WRONG_TEACHER_PASSWORD;
 		}
-		
+
 		PrintStream ps = new PrintStream(resp.getOutputStream());
 		ps.print(answer.ordinal());
 		ps.close();

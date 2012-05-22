@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="false">
+    <datastore-index kind="Join" ancestor="false" source="manual">
+        <property name="course" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Leave" ancestor="false" source="manual">
+        <property name="course" direction="asc"/>
+        <property name="username" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Heartbeat" ancestor="false" source="manual">
+        <property name="course" direction="asc"/>
+        <property name="username" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="exercise" ancestor="false" source="manual">
+        <property name="course" direction="asc"/>
+        <property name="username" direction="asc"/>
+        <property name="date" direction="asc"/>
+    </datastore-index>
+</datastore-indexes>
