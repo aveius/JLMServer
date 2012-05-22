@@ -1,28 +1,14 @@
 package jlm.gae.servlets;
 
-import jlm.gae.models.Course;
-import jlm.gae.models.Answer;
-import jlm.gae.models.Exercise;
-import jlm.gae.models.Heartbeat;
-import jlm.gae.models.Help;
-import jlm.gae.models.Join;
-import jlm.gae.models.Leave;
-import jlm.gae.models.Switch;
+import com.google.appengine.api.datastore.*;
+import jlm.gae.models.*;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-
-import net.minidev.json.JSONObject;
-import net.minidev.json.JSONValue;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -98,7 +84,7 @@ public class StudentServlet extends HttpServlet {
 				String exolang = (String) jsonObject.get("exolang");
 
 				int passedtests = Integer.valueOf((String) jsonObject
-						.get("passedtests"));
+                        .get("passedtests"));
 				int totaltests = Integer.valueOf((String) jsonObject
 						.get("totaltests"));
 				String source = (String) jsonObject.get("source");

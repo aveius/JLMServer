@@ -1,7 +1,6 @@
 package jlm.gae.servlets;
 
 import com.google.appengine.api.datastore.*;
-
 import jlm.gae.data.ExerciseData;
 import jlm.gae.data.UserData;
 import jlm.gae.models.*;
@@ -19,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class TeacherServlet extends HttpServlet {
@@ -82,7 +80,7 @@ public class TeacherServlet extends HttpServlet {
 				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
 				pq = datastore.prepare(q);
 				iten = pq.asIterator();
-				if (iten.hasNext()) {
+				while (iten.hasNext()) {
 					Join j = new Join(iten.next());
 					if (!map.containsKey(j.getUsername())) {
 						UserData u = new UserData();
@@ -101,7 +99,7 @@ public class TeacherServlet extends HttpServlet {
 					q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
-					if (iten.hasNext()) {
+					while (iten.hasNext()) {
 						Leave l = new Leave(iten.next());
 						UserData u = map.get(username);
 						if (u.getLastJoin().before(l.getDate())) {
@@ -118,7 +116,7 @@ public class TeacherServlet extends HttpServlet {
 					q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
-					if (iten.hasNext()) {
+					while (iten.hasNext()) {
 						Heartbeat h = new Heartbeat(iten.next());
 						UserData u = map.get(username);
 						if (u.getLastJoin().before(h.getDate())) {
@@ -135,7 +133,7 @@ public class TeacherServlet extends HttpServlet {
 					q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
-					if (iten.hasNext()) {
+					while (iten.hasNext()) {
 						Exercise e = new Exercise(iten.next());
 						UserData u = map.get(username);
 						
