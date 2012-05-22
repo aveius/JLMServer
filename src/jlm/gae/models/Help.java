@@ -10,7 +10,7 @@ public class Help extends GAEObject {
 
 	public final static String KIND = "Help";
 
-	public Help(String username, String course, String password, String status) {
+	public Help(String username, String course, String password, boolean status) {
 		super(KIND);
 		put("username", username);
 		put("course", course);
@@ -30,8 +30,8 @@ public class Help extends GAEObject {
 		return (String) get("course");
 	}
 
-	public String getStatus() {
-		return (String) get("status");
+	public boolean getStatus() {
+		return (Boolean) get("status");
 	}
 	
 	public Date getDate() {

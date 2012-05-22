@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,15 +70,17 @@ public class TeacherServlet extends HttpServlet {
 
 			answer = co.save();
 		} else if (password_ok) {
+			Date last2Hours = new Date();
+			last2Hours.setTime(last2Hours.getTime() - 2 * 24 * 60 * 60
+					* 1000);
 			if (action.equalsIgnoreCase("refresh")) {
-				Date last2Hours = new Date();
-				last2Hours.setTime(last2Hours.getTime() - 2 * 24 * 60 * 60 * 1000);
-				Map<String,UserData> map = new HashMap<String,UserData>();
+				Map<String, UserData> map = new HashMap<String, UserData>();
 
 				// Get users with Join events
 				q = new Query(Join.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
-				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
+				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+						last2Hours);
 				pq = datastore.prepare(q);
 				iten = pq.asIterator();
 				while (iten.hasNext()) {
@@ -85,8 +88,8 @@ public class TeacherServlet extends HttpServlet {
 					if (!map.containsKey(j.getUsername())) {
 						UserData u = new UserData();
 						u.setUsername(j.getUsername());
-                        u.setLastJoin(j.getDate());
-						map.put(j.getUsername(),u);
+						u.setLastJoin(j.getDate());
+						map.put(j.getUsername(), u);
 					}
 				}
 
@@ -94,16 +97,21 @@ public class TeacherServlet extends HttpServlet {
 				for (String username : map.keySet()) {
 					// get all data since last leave
 					q = new Query(Leave.KIND);
-					q.addFilter("username", Query.FilterOperator.EQUAL, username);
+					q.addFilter("username", Query.FilterOperator.EQUAL,
+							username);
 					q.addFilter("course", Query.FilterOperator.EQUAL, course);
-					q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
+					q.addFilter("date",
+							Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+							last2Hours);
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
 					while (iten.hasNext()) {
 						Leave l = new Leave(iten.next());
 						UserData u = map.get(username);
 						if (u.getLastJoin().before(l.getDate())) {
-							if (u.getLastLeave() == null || u.getLastLeave() != null && u.getLastLeave().before(l.getDate())) {
+							if (u.getLastLeave() == null
+									|| u.getLastLeave() != null
+									&& u.getLastLeave().before(l.getDate())) {
 								u.setLastLeave(l.getDate());
 							}
 						}
@@ -111,16 +119,21 @@ public class TeacherServlet extends HttpServlet {
 
 					// get the last heartbeat
 					q = new Query(Heartbeat.KIND);
-					q.addFilter("username", Query.FilterOperator.EQUAL, username);
+					q.addFilter("username", Query.FilterOperator.EQUAL,
+							username);
 					q.addFilter("course", Query.FilterOperator.EQUAL, course);
-					q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
+					q.addFilter("date",
+							Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+							last2Hours);
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
 					while (iten.hasNext()) {
 						Heartbeat h = new Heartbeat(iten.next());
 						UserData u = map.get(username);
 						if (u.getLastJoin().before(h.getDate())) {
-							if (u.getLastHeartbeat() == null || u.getLastHeartbeat() != null && u.getLastHeartbeat().before(h.getDate())) {
+							if (u.getLastHeartbeat() == null
+									|| u.getLastHeartbeat() != null
+									&& u.getLastHeartbeat().before(h.getDate())) {
 								u.setLastHeartbeat(h.getDate());
 							}
 						}
@@ -128,9 +141,12 @@ public class TeacherServlet extends HttpServlet {
 
 					// get all exercises
 					q = new Query(Exercise.KIND);
-					q.addFilter("username", Query.FilterOperator.EQUAL, username);
+					q.addFilter("username", Query.FilterOperator.EQUAL,
+							username);
 					q.addFilter("course", Query.FilterOperator.EQUAL, course);
-					q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL, last2Hours);
+					q.addFilter("date",
+							Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+							last2Hours);
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
 					while (iten.hasNext()) {
@@ -140,8 +156,8 @@ public class TeacherServlet extends HttpServlet {
 						ExerciseData ue = new ExerciseData();
 						ue.setName(e.getExoName());
 						ue.setLang(e.getExoLang());
-						ue.setPassedTests((int)e.getPassedTests());
-						ue.setTotalTests((int)e.getTotalTests());
+						ue.setPassedTests((int) e.getPassedTests());
+						ue.setTotalTests((int) e.getTotalTests());
 						// ue.setSource(e.getSource());
 						ue.setDate(e.getDate());
 
@@ -151,7 +167,30 @@ public class TeacherServlet extends HttpServlet {
 
 				PrintStream ps = new PrintStream(resp.getOutputStream());
 				ps.print(JSONValue.toJSONString(map));
-                System.out.println(map);
+				System.out.println(map);
+				ps.close();
+				return;
+			} else if (action.equalsIgnoreCase("needinghelp")) {
+				ArrayList<String> list = new ArrayList<String>();
+
+				// Get users with Help events
+				q = new Query(Help.KIND);
+				q.addFilter("course", Query.FilterOperator.EQUAL, course);
+				q.addFilter("status", Query.FilterOperator.EQUAL, true);
+				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+						last2Hours);
+				pq = datastore.prepare(q);
+				iten = pq.asIterator();
+				while (iten.hasNext()) {
+					Help h = new Help(iten.next());
+					if (!list.contains(h.getUsername())) {
+						list.add(h.getUsername());
+					}
+				}
+
+				PrintStream ps = new PrintStream(resp.getOutputStream());
+				ps.print(JSONValue.toJSONString(list));
+				System.out.println(list);
 				ps.close();
 				return;
 			} else if (action.equalsIgnoreCase("remove")) {
