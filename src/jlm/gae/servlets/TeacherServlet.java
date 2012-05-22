@@ -136,15 +136,14 @@ public class TeacherServlet extends HttpServlet {
 					pq = datastore.prepare(q);
 					iten = pq.asIterator();
 					if (iten.hasNext()) {
-                        System.out.println("exercise");
 						Exercise e = new Exercise(iten.next());
 						UserData u = map.get(username);
 						
 						ExerciseData ue = new ExerciseData();
 						ue.setName(e.getExoName());
 						ue.setLang(e.getExoLang());
-						ue.setPassedTests(e.getPassedTests());
-						ue.setTotalTests(e.getTotalTests());
+						ue.setPassedTests((int)e.getPassedTests());
+						ue.setTotalTests((int)e.getTotalTests());
 						// ue.setSource(e.getSource());
 						ue.setDate(e.getDate());
 

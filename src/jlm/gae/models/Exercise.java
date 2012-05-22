@@ -41,12 +41,12 @@ public class Exercise extends GAEObject {
 		return (String) get("course");
 	}
 
-	public Integer getPassedTests() {
-		return (Integer) get("passedtests");
+	public long getPassedTests() {
+		return (Long)get("passedtests");
 	}
 
-	public Integer getTotalTests() {
-		return (Integer) get("totaltests");
+	public long getTotalTests() {
+		return (Long) get("totaltests");
 	}
 
 	public String getSource() {
