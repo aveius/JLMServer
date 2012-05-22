@@ -193,6 +193,128 @@ public class TeacherServlet extends HttpServlet {
 				System.out.println(list);
 				ps.close();
 				return;
+			} else if (action.equalsIgnoreCase("ugly")) {
+				ArrayList<String> list = new ArrayList<String>();
+
+				// Get users with Join events
+				q = new Query(Join.KIND);
+				q.addFilter("course", Query.FilterOperator.EQUAL, course);
+				q.addFilter("status", Query.FilterOperator.EQUAL, true);
+				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+						last2Hours);
+				pq = datastore.prepare(q);
+				iten = pq.asIterator();
+				while (iten.hasNext()) {
+					Join j = new Join(iten.next());
+					String username = j.getUsername();
+					if (!list.contains(username)) {
+						// Get all exercises for the student
+						q = new Query(Exercise.KIND);
+						q.addFilter("username", Query.FilterOperator.EQUAL,
+								username);
+						q.addFilter("course", Query.FilterOperator.EQUAL, course);
+						q.addFilter("date",
+								Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+								last2Hours);
+						pq = datastore.prepare(q);
+						Iterator<Entity> iten2 = pq.asIterator();
+						if (!iten2.hasNext()) {
+							list.add(username);
+						}
+					}
+				}
+
+				PrintStream ps = new PrintStream(resp.getOutputStream());
+				ps.print(JSONValue.toJSONString(list));
+				System.out.println(list);
+				ps.close();
+				return;
+			} else if (action.equalsIgnoreCase("bad")) {
+				ArrayList<String> list = new ArrayList<String>();
+
+				// Get users with Join events
+				q = new Query(Join.KIND);
+				q.addFilter("course", Query.FilterOperator.EQUAL, course);
+				q.addFilter("status", Query.FilterOperator.EQUAL, true);
+				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+						last2Hours);
+				pq = datastore.prepare(q);
+				iten = pq.asIterator();
+				while (iten.hasNext()) {
+					Join j = new Join(iten.next());
+					String username = j.getUsername();
+					int passed = 0;
+					int total = 0;
+					if (!list.contains(username)) {
+						// Get all exercises for the student
+						q = new Query(Exercise.KIND);
+						q.addFilter("username", Query.FilterOperator.EQUAL,
+								username);
+						q.addFilter("course", Query.FilterOperator.EQUAL, course);
+						q.addFilter("date",
+								Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+								last2Hours);
+						pq = datastore.prepare(q);
+						Iterator<Entity> iten2 = pq.asIterator();
+						while (!iten2.hasNext()) {
+							Exercise e = new Exercise(iten2.next());
+							passed += e.getPassedTests();
+							total += e.getTotalTests();
+						}
+					}
+					if (passed <= total / 100 * 5) {
+						list.add(username);
+					}
+				}
+
+				PrintStream ps = new PrintStream(resp.getOutputStream());
+				ps.print(JSONValue.toJSONString(list));
+				System.out.println(list);
+				ps.close();
+				return;
+			} else if (action.equalsIgnoreCase("good")) {
+				ArrayList<String> list = new ArrayList<String>();
+
+				// Get users with Join events
+				q = new Query(Join.KIND);
+				q.addFilter("course", Query.FilterOperator.EQUAL, course);
+				q.addFilter("status", Query.FilterOperator.EQUAL, true);
+				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+						last2Hours);
+				pq = datastore.prepare(q);
+				iten = pq.asIterator();
+				while (iten.hasNext()) {
+					Join j = new Join(iten.next());
+					String username = j.getUsername();
+					int passed = 0;
+					int total = 0;
+					if (!list.contains(username)) {
+						// Get all exercises for the student
+						q = new Query(Exercise.KIND);
+						q.addFilter("username", Query.FilterOperator.EQUAL,
+								username);
+						q.addFilter("course", Query.FilterOperator.EQUAL, course);
+						q.addFilter("date",
+								Query.FilterOperator.GREATER_THAN_OR_EQUAL,
+								last2Hours);
+						pq = datastore.prepare(q);
+						Iterator<Entity> iten2 = pq.asIterator();
+						while (!iten2.hasNext()) {
+							Exercise e = new Exercise(iten2.next());
+							passed += e.getPassedTests();
+							total += e.getTotalTests();
+						}
+					}
+					if (passed >= total / 100 * 90) {
+						list.add(username);
+					}
+				}
+
+				PrintStream ps = new PrintStream(resp.getOutputStream());
+				ps.print(JSONValue.toJSONString(list));
+				System.out.println(list);
+				ps.close();
+				return;
 			} else if (action.equalsIgnoreCase("remove")) {
 				q = new Query(Course.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
