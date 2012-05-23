@@ -17,6 +17,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -172,7 +173,7 @@ public class TeacherServlet extends HttpServlet {
 				ps.close();
 				return;
 			} else if (action.equalsIgnoreCase("needinghelp")) {
-				ArrayList<String> list = new ArrayList<String>();
+				HashSet<String> list = new HashSet<String>();
 
 				// Get users with Help events
 				q = new Query(Help.KIND);
@@ -195,7 +196,7 @@ public class TeacherServlet extends HttpServlet {
 				ps.close();
 				return;
 			} else if (action.equalsIgnoreCase("ugly")) {
-				ArrayList<String> list = new ArrayList<String>();
+				HashSet<String> list = new HashSet<String>();
 
 				// Get users with Join events
 				q = new Query(Join.KIND);
@@ -230,7 +231,7 @@ public class TeacherServlet extends HttpServlet {
 				ps.close();
 				return;
 			} else if (action.equalsIgnoreCase("bad")) {
-				ArrayList<String> list = new ArrayList<String>();
+				HashSet<String> list = new HashSet<String>();
 
 				// Get users with Join events
 				q = new Query(Join.KIND);
