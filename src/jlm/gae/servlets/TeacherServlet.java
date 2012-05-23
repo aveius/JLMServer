@@ -71,7 +71,8 @@ public class TeacherServlet extends HttpServlet {
 			answer = co.save();
 		} else if (password_ok) {
 			Date last2Hours = new Date();
-			last2Hours.setTime(last2Hours.getTime() - 2 * 24 * 60 * 60
+            // TODO change 5hours to 2 hours
+			last2Hours.setTime(last2Hours.getTime() - 5 * 24 * 60 * 60
 					* 1000);
 			if (action.equalsIgnoreCase("refresh")) {
 				Map<String, UserData> map = new HashMap<String, UserData>();
@@ -199,7 +200,6 @@ public class TeacherServlet extends HttpServlet {
 				// Get users with Join events
 				q = new Query(Join.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
-				q.addFilter("status", Query.FilterOperator.EQUAL, true);
 				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
 						last2Hours);
 				pq = datastore.prepare(q);
@@ -235,7 +235,6 @@ public class TeacherServlet extends HttpServlet {
 				// Get users with Join events
 				q = new Query(Join.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
-				q.addFilter("status", Query.FilterOperator.EQUAL, true);
 				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
 						last2Hours);
 				pq = datastore.prepare(q);
@@ -278,7 +277,6 @@ public class TeacherServlet extends HttpServlet {
 				// Get users with Join events
 				q = new Query(Join.KIND);
 				q.addFilter("course", Query.FilterOperator.EQUAL, course);
-				q.addFilter("status", Query.FilterOperator.EQUAL, true);
 				q.addFilter("date", Query.FilterOperator.GREATER_THAN_OR_EQUAL,
 						last2Hours);
 				pq = datastore.prepare(q);
