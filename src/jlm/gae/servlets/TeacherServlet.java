@@ -256,7 +256,7 @@ public class TeacherServlet extends HttpServlet {
 								last2Hours);
 						pq = datastore.prepare(q);
 						Iterator<Entity> iten2 = pq.asIterator();
-						while (!iten2.hasNext()) {
+						while (iten2.hasNext()) {
 							Exercise e = new Exercise(iten2.next());
 							passed += e.getPassedTests();
 							total += e.getTotalTests();
@@ -299,7 +299,7 @@ public class TeacherServlet extends HttpServlet {
 								last2Hours);
 						pq = datastore.prepare(q);
 						Iterator<Entity> iten2 = pq.asIterator();
-						while (!iten2.hasNext()) {
+						while (iten2.hasNext()) {
 							Exercise e = new Exercise(iten2.next());
 							passed += e.getPassedTests();
 							total += e.getTotalTests();
