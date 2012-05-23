@@ -261,7 +261,7 @@ public class TeacherServlet extends HttpServlet {
                             passed += e.getPassedTests();
                             total += e.getTotalTests();
                         }
-                        if (passed <= total / 100 * 5) {
+                        if (passed <= total * 0.05) {
                             list.add(username);
                         }
                     }
@@ -305,7 +305,7 @@ public class TeacherServlet extends HttpServlet {
                             total += e.getTotalTests();
 
                         }
-                        if (passed >= total / 100 * 90) {
+                        if (passed != 0 && passed >= (total * 0.9)) {
                             list.add(username);
                         }
                     }
