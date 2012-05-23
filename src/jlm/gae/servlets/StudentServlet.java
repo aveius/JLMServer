@@ -93,7 +93,6 @@ public class StudentServlet extends HttpServlet {
 						passedtests, totaltests, source);
 				answer = ex.save();
 			} else if (action.equalsIgnoreCase("help")) {
-				System.out.println((String) jsonObject.get("status"));
 				boolean status = Boolean.parseBoolean((String) jsonObject.get("status"));
 
 				Help he = new Help(username, course, password, status);
